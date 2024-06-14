@@ -15,7 +15,7 @@ const NotificationPage = () => {
     try {
       dispatch(showLoading());
       const res = await axios.post(
-        "/api/v1/user/get-all-notification",
+        `${process.env.REACT_APP_API}/api/v1/user/get-all-notification`,
         {
           userId: user._id,
         },
@@ -28,13 +28,14 @@ const NotificationPage = () => {
       dispatch(hideLoading());
       if (res.data.success) {
         message.success(res.data.message);
+        // window.location.reload();
       } else {
         message.error(res.data.message);
       }
     } catch (error) {
       dispatch(hideLoading());
       console.log(error);
-      message.error("somthing went wrong");
+      message.error("something went wrong");
     }
   };
 
@@ -43,7 +44,7 @@ const NotificationPage = () => {
     try {
       dispatch(showLoading());
       const res = await axios.post(
-        "/api/v1/user/delete-all-notification",
+        `${process.env.REACT_APP_API}/api/v1/user/delete-all-notification`,
         { userId: user._id },
         {
           headers: {
@@ -54,22 +55,23 @@ const NotificationPage = () => {
       dispatch(hideLoading());
       if (res.data.success) {
         message.success(res.data.message);
+        // window.location.reload();
       } else {
         message.error(res.data.message);
       }
     } catch (error) {
       dispatch(hideLoading());
       console.log(error);
-      message.error("Somthing Went Wrong In Ntifications");
+      message.error("Somthing Went Wrong In Notifications");
     }
   };
   return (
     <Layout>
       <h4 className="p-3 text-center">Notification Page</h4>
       <Tabs>
-        <Tabs.TabPane tab="unRead" key={0}>
+        <Tabs.TabPane tab="Unread" key={0}>
           <div className="d-flex justify-content-end">
-            <h4 className="p-2" onClick={handleMarkAllRead}>
+            <h4 className="p-2" onClick={handleMarkAllRead} style={{ cursor: "pointer" }}>
               Mark All Read
             </h4>
           </div>

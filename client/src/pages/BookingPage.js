@@ -6,6 +6,7 @@ import { DatePicker, message, TimePicker } from "antd";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { showLoading, hideLoading } from "../redux/features/alertSlice";
+import '../styles/BookingPage.css';
 
 const BookingPage = () => {
   const { user } = useSelector((state) => state.user);
@@ -19,7 +20,7 @@ const BookingPage = () => {
   const getUserData = async () => {
     try {
       const res = await axios.post(
-        "/api/v1/doctor/getDoctorById",
+        `${process.env.REACT_APP_API}/api/v1/doctor/getDoctorById`,
         { doctorId: params.doctorId },
         {
           headers: {
@@ -39,7 +40,7 @@ const BookingPage = () => {
     try {
       dispatch(showLoading());
       const res = await axios.post(
-        "/api/v1/user/booking-availbility",
+        `${process.env.REACT_APP_API}/api/v1/user/booking-availbility`,
         { doctorId: params.doctorId, date, time },
         {
           headers: {
@@ -69,7 +70,7 @@ const BookingPage = () => {
       }
       dispatch(showLoading());
       const res = await axios.post(
-        "/api/v1/user/book-appointment",
+        `${process.env.REACT_APP_API}/api/v1/user/book-appointment`,
         {
           doctorId: params.doctorId,
           userId: user._id,
@@ -100,19 +101,23 @@ const BookingPage = () => {
   }, []);
   return (
     <Layout>
+      <div className='container'>
+        <main className='grid'>
+            <article>
+            <div className='text'>
       <h3>Booking Page</h3>
       <div className="container m-2">
         {doctors && (
           <div>
             <h4>
-              Dr.{doctors.firstName} {doctors.lastName}
+              Dr. {doctors.firstName} {doctors.lastName}
             </h4>
             <h4>Fees : {doctors.feesPerCunsaltation}</h4>
             <h4>
               Timings : {doctors.timings && doctors.timings[0]} -{" "}
               {doctors.timings && doctors.timings[1]}{" "}
             </h4>
-            <div className="d-flex flex-column w-50">
+            <div className="picker">
               <DatePicker
                 aria-required={"true"}
                 className="m-2"
@@ -129,20 +134,27 @@ const BookingPage = () => {
                   setTime(moment(value).format("HH:mm"));
                 }}
               />
-
+              
+       </div>
+              <div className="btn-container">
               <button
                 className="btn btn-primary mt-2"
                 onClick={handleAvailability}
               >
                 Check Availability
               </button>
-
+                  </div>
+              <div className="btn-container">
               <button className="btn btn-dark mt-2" onClick={handleBooking}>
                 Book Now
               </button>
             </div>
           </div>
         )}
+      </div>
+      </div>
+      </article>
+      </main>
       </div>
     </Layout>
   );
